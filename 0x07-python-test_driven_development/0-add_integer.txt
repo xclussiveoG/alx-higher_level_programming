@@ -1,105 +1,95 @@
->>> add_integer = __import__('0-add_integer').add_integer
+The ``0-add_integer`` module
+============================
 
-==== Test for expected behaviour ====
+Using ``add_integer``
+---------------------
 
->>> add_integer(1, 2)
-3
->>> add_integer(100, -2)
-98
->>> add_integer(2)
-100
->>> add_integer(100.3, -2)
-98
->>> add_integer(-2, 100.3)
-98
->>> add_integer(0)
-98
->>> add_integer(float('8.9'))
-106
+Importing function from the module:
+    >>> add_integer = __import__('0-add_integer').add_integer
 
-==== Now let's check for edge cases ====
+Adding 1 and 2
+    >>> add_integer(1, 2)
+    3
 
-Edge case 1: Passing strings as arguments
->>> add_integer(4, "School")
-Traceback (most recent call last):
-...
-TypeError: b must be an integer
->>> add_integer("Best", "School")
-Traceback (most recent call last):
-...
-TypeError: a must be an integer
+Subtracting 100 and 2
+    >>> add_integer(100, -2)
+    98
 
-Edge case 2: Passing None as an argument
->>> add_integer(None)
-Traceback (most recent call last):
-...
-TypeError: a must be an integer
->>> add_integer(12, None)
-Traceback (most recent call last):
-...
-TypeError: b must be an integer
+Adding 2.1 and 98
+    >>> add_integer(2.1)
+    100
 
-# Edge case 3: Passing infinity as an argument (Tests for overflow)
->>> add_integer(float('inf'))
-Traceback (most recent call last):
-...
-OverflowError: cannot convert float infinity to integer
->>> add_integer(76, float('inf'))
-Traceback (most recent call last):
-...
-OverflowError: cannot convert float infinity to integer
+Subtracting 100.3 and 2
+	    >>> add_integer(100.3, -2)
+	    98
 
-# Edge 4: Check for the NaN type
->>> add_integer(float('nan'))
-Traceback (most recent call last):
-...
-ValueError: cannot convert float NaN to integer
+Adding an integer number and a string
+    >>> add_integer(4, "School")
+    Traceback (most recent call last):
+	      ...
+    TypeError: b must be an integer
 
-# Edge 5: Try different sequence data types and others
->>> add_integer([4, 3])
-Traceback (most recent call last):
-...
-TypeError: a must be an integer
->>> add_integer(float('School'))
-Traceback (most recent call last):
-...
-ValueError: could not convert string to float: 'School'
+Passing None
+    >>> add_integer(None)
+    Traceback (most recent call last):
+	      ...
+    TypeError: a must be an integer
 
-# Edge case 6: Positional argument missing
->>> add_integer()
-Traceback (most recent call last):
-...
-TypeError: add_integer() missing 1 required positional argument: 'a'
+Adding a letter and a number
+    >>> add_integer('1', 1)
+    Traceback (most recent call last):
+              ...
+    TypeError: a must be an integer
 
-==== ALX-based tests ====
+Adding two letters
+    >>> add_integer('2', '1')
+    Traceback (most recent call last):
+              ...
+    TypeError: a must be an integer
 
->>> add_integer(1, 2)
-3
->>> add_integer(100, -2)
-98
->>> add_integer(2)
-100
->>> add_integer(100.3, -2)
-98
->>> add_integer(-2, 100.3)
-98
->>> add_integer(4, "School")
-Traceback (most recent call last):
-...
-TypeError: b must be an integer
->>> add_integer("Best", "School")
-Traceback (most recent call last):
-...
-TypeError: a must be an integer
->>> add_integer(None)
-Traceback (most recent call last):
-...
-TypeError: a must be an integer
->>> add_integer(float('inf'))
-Traceback (most recent call last):
-...
-OverflowError: cannot convert float infinity to integer
->>> add_integer(float('nan'))
-Traceback (most recent call last):
-...
-ValueError: cannot convert float NaN to integer
+Adding a tuple
+    >>> add_integer((1, 1))
+    Traceback (most recent call last):
+              ...
+    TypeError: a must be an integer
+
+Adding a number and a list
+    >>> add_integer(123, [])
+    Traceback (most recent call last):
+	      ...
+    TypeError: b must be an integer
+
+Passing a string
+    >>> add_integer("Hello")
+    Traceback (most recent call last):
+	      ...
+    TypeError: a must be an integer
+
+Adding two float numbers
+    >>> add_integer(2.9, 2.9)
+    4
+
+Subtracting 98 and 1
+    >>> add_integer(-1)
+    97
+
+Case Overflow:
+
+    >>> add_integer(float('inf'), 0)
+    Traceback (most recent call last):
+    	      ...
+    OverflowError: cannot convert float infinity to integer
+
+Case Overflow 2:
+
+    >>> add_integer(float('inf'), float('-inf'))
+    Traceback (most recent call last):
+    	      ...
+    OverflowError: cannot convert float infinity to integer
+
+Case NaN:
+
+    >>> add_integer(0, float('nan'))
+    Traceback (most recent call last):
+    	      ...
+    ValueError: cannot convert float NaN to integer

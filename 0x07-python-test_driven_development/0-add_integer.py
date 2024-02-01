@@ -1,47 +1,30 @@
 #!/usr/bin/python3
-
 """
-Module with a function that adds two numbers. It checks for the validity of
-arguments given as operands before trying to add them. In the event of an
-error, an exception is raised. Notable amongst these exceptions is the
-TypeError which is raised when the operands fail to be an integer.
+
+This module is composed by a function that adds two numbers
+
 """
 
 
-def add_integer(a: "float | int", b: "float | int" = 98) -> int:
-    """Returns the sum of two integers.
+def add_integer(a, b=98):
+    """ Function that adds two integer and/or float numbers
 
     Args:
-        a (float | int): The first number.
-        b (float | int, optional): The second number. Defaults to 98.
-
-    Raises:
-        TypeError: When the operands given are not of a valid type (integers).
+        a: first number
+        b: second number
 
     Returns:
-        int: The sum of the two numbers as an integer.
+        The addition of the two given numbers
 
-    Tests:
-        >>> add_integer(0)
-        98
-        >>> add_integer(1, -2)
-        -1
-        >>> add_integer('1', '67')
-        Traceback (most recent call last):
-        ...
-        TypeError: a must be an integer
+    Raises:
+        TypeError: If a or b aren't integer and/or float numbers
+
     """
-    if not isinstance(a, (int, float)):
+
+    if not isinstance(a, int) and not isinstance(a, float):
         raise TypeError("a must be an integer")
-
-    if not isinstance(b, (int, float)):
+    if not isinstance(b, int) and not isinstance(b, float):
         raise TypeError("b must be an integer")
-
-    # ensure the operands are of integer type
-    try:
-        int(a)
-        int(b)
-    except Exception as err:
-        raise err
-
-    return int(a) + int(b)
+    a = int(a)
+    b = int(b)
+    return (a + b)
