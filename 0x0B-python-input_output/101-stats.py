@@ -1,52 +1,76 @@
 #!/usr/bin/python3
+"""Reads from standard input and computes metrics"""
 
-"""A module that models a Student object."""
+from typing import Dict, List, Tuple
+
+VALID_CODES = {"200", "301", "400", "401", "403", "404", "405", "500"}
 
 
-class Student:
-    """Models a Student object."""
+def print_stats(size: int, status_codes: Dict[str, int]) -> None:
+    """
+    Print accumulated metrics.
 
-    def __init__(self, first_name: str, last_name: str, age: int) -> None:
-        """
-        Initializes / creates a new Student object.
+    Args:
+        size (int): Total file size.
+        status_codes (Dict[str, int]): Dictionary containing status codes
+        and their counts.
+    """
+    print("File size: {}".format(size))
+    for key in sorted(status_codes):
+        print("{}: {}".format(key, status_codes[key]))
 
-        Args:
-            first_name (str): The student's first name.
-            last_name (str): The student's last name.
-            age (int): The student's age.
-        """
-        self.first_name = first_name
-        self.last_name = last_name
-        self.age = age
 
-    def to_json(self, attr=None) -> dict:
-        """
-        Returns the dictionary representation of the `Student` object.
+def process_line(
+    line: List[str], size: int, status_codes: Dict[str, int]
+) -> Tuple[int, Dict[str, int]]:
+    """
+    Process a single line and update metrics.
 
-        Args:
-            attr: A list of attribute names to retrieve.
+    Args:
+        line (List[str]): List of strings representing a line.
+        size (int): Current total file size.
+        status_codes (Dict[str, int]): Dictionary containing status codes
+        and their counts.
 
-        Returns:
-            dict: The dictionary representation of the `Student` object.
-        """
-        if attr is not None and isinstance(attr, list):
-            return {
-                key: value
-                for key, value in self.__dict__.items()
-                if key in attr
-            }
+    Returns:
+        Tuple[int, Dict[str, int]]: Updated size and status_codes.
+    """
+    try:
+        size += int(line[-1])
+    except (IndexError, ValueError):
+        pass
 
-        # no specific attributes were given, return everything
-        return self.__dict__
+    try:
+        if line[-2] in VALID_CODES:
+            status_codes[line[-2]] = status_codes.get(line[-2], 0) + 1
+    except IndexError:
+        pass
 
-    def reload_from_json(self, json: dict) -> None:
-        """
-        Replaces all attributes of a `Student` instance with contents in a
-        JSON file.
+    return size, status_codes
 
-        Args:
-            json (dict): The JSON file containing the `__dict__`-like
-            structure of a Student object.
-        """
-        for key, value in json.items():
-            self.__dict__[key] = value
+
+def process_input() -> None:
+    """Reads from standard input, processes lines, and prints metrics."""
+    size = 0
+    status_codes: Dict[str, int] = {}
+    count = 0
+
+    try:
+        for line in sys.stdin:
+            count = (count + 1) % 10
+            size, status_codes = process_line(line.split(), size, status_codes)
+
+            if count == 0:
+                print_stats(size, status_codes)
+
+        print_stats(size, status_codes)
+
+    except KeyboardInterrupt:
+        print_stats(size, status_codes)
+        raise
+
+
+if __name__ == "__main__":
+    import sys
+
+    process_input()
